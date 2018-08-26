@@ -1,0 +1,34 @@
+---
+- name: "Hello World Webserver Deploy"
+  hosts: localhost
+
+  tasks:
+    - name: setup latest nginx
+      apt: name=nginx state=latest
+      become: yes
+    - name: start nginx
+      service:
+        name: nginx
+        state: started 
+      become: yes
+    - name: remove default configs
+      file: 
+        state: absent
+        path: /etc/nginx/conf.d/*
+    - name: remove default page
+      file:
+        state: absent
+        path: /etc/nginx/sites-enabled/default
+    - name: add server config
+      copy:
+        src: static_site.conf
+        dest: /etc/nginx/conf.d/
+    - name: add static page
+      copy:
+        src: index.html
+        dest: /usr/share/nginx/html
+    - name: restart nginx
+      service: 
+        name: nginx
+        state: restarted
+      become: yes

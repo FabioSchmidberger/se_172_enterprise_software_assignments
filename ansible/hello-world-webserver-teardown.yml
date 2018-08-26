@@ -1,0 +1,13 @@
+---
+- name: Hello Word Webserver Teardown
+  hosts: localhost
+
+  tasks:
+    - name: stop nginx webserver
+      service:
+        name: nginx
+        state: stopped
+      become: yes
+    - name: make sure nginx is not installed
+      apt: name=nginx state=absent
+      become: yes
