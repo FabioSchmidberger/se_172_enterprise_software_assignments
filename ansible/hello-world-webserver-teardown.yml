@@ -9,5 +9,5 @@
         state: stopped
       become: yes
     - name: make sure nginx is not installed
-      apt: name=nginx state=absent
+      apt: name=nginx state=absent purge=yes
       become: yes
