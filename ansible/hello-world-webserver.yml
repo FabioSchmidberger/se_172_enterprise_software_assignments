@@ -45,6 +45,14 @@
         name: nginx
         state: stopped
       become: yes
+    - name: delete server config
+      file: 
+        state: absent
+        path: /etc/nginx/conf.d/hello_world.conf
+    - name: delete hello world page
+      file: 
+        state: absent
+        path: /var/www/hello_world/
     - name: make sure nginx is not installed
       apt: name=nginx state=absent purge=yes
       become: yes
