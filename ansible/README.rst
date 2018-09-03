@@ -5,20 +5,14 @@ Ansile
 How To Run
 ==========
 
-Run the deployment playbook:
+Run the deployment play:
 
 .. code::
 
-    sudo ansible-playbook -i hosts.conf hello-world-webserver-deploy.yml -b
+    sudo ansible-playbook -i hosts.conf hello-world-webserver.yml --tags "undeploy"
 
-Run the teardown playbook:
+Run the teardown play:
 
 .. code::
 
-    sudo ansible-playbook -i hosts.conf hello-world-webserver-teardown.yml -b
-
-Todo
-====
-
-- sudo privledge for playbook
-- Teardown Script: why is nginx not proberly uninstalled? even the config files are still present..
+    sudo ansible-playbook -i hosts.conf hello-world-webserver.yml --tags "undeploy"
