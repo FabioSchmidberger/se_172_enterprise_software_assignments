@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1hjcp00" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.1">
+  <bpmn:process id="post-tweet" name="Post Tweet" isExecutable="true" camunda:versionTag="1">
+    <bpmn:sequenceFlow id="SequenceFlow_0r4znti" sourceRef="StartEvent_1" targetRef="Task_0n1qwfh" />
+    <bpmn:serviceTask id="printing-tweet" name="Print Tweet" camunda:type="external" camunda:topic="print-tweet">
+      <bpmn:incoming>SequenceFlow_0crt52k</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1sl2baz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1b1w5lu" name="Tweet finished">
+      <bpmn:incoming>SequenceFlow_1sl2baz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1sl2baz" sourceRef="printing-tweet" targetRef="EndEvent_1b1w5lu" />
+    <bpmn:startEvent id="StartEvent_1" name="Recieve Tweet Drafte">
+      <bpmn:outgoing>SequenceFlow_0r4znti</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">20 0 * * * ?</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0crt52k" sourceRef="Task_0n1qwfh" targetRef="printing-tweet" />
+    <bpmn:userTask id="Task_0n1qwfh" name="Approve Tweetet" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="text" label="Text" type="string" />
+          <camunda:formField id="approved" label="approved?" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0r4znti</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0crt52k</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="post-tweet">
+      <bpmndi:BPMNEdge id="SequenceFlow_0r4znti_di" bpmnElement="SequenceFlow_0r4znti">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="266" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_074jap9_di" bpmnElement="printing-tweet">
+        <dc:Bounds x="428" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1b1w5lu_di" bpmnElement="EndEvent_1b1w5lu">
+        <dc:Bounds x="597" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="580" y="145" width="71" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1sl2baz_di" bpmnElement="SequenceFlow_1sl2baz">
+        <di:waypoint x="528" y="120" />
+        <di:waypoint x="597" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="StartEvent_1gogx1o_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="155" y="145" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0crt52k_di" bpmnElement="SequenceFlow_0crt52k">
+        <di:waypoint x="366" y="120" />
+        <di:waypoint x="428" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1wj340m_di" bpmnElement="Task_0n1qwfh">
+        <dc:Bounds x="266" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,12 @@
+{
+  "name": "printer_service",
+  "version": "1.0.0",
+  "description": "prints values to console",
+  "main": "index.js",
+  "author": "fabio schmidberger",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "camunda-external-task-client-js": "^1.1.0-alpha1"
+  }
+}
