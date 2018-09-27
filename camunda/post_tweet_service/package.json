@@ -1,0 +1,17 @@
+{
+  "name": "post_tweet_service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tweet.js",
+  "scripts": {
+    "start": "node tweet.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "camunda-external-task-client-js": "^1.1.0-alpha1",
+    "config": "^2.0.1",
+    "oauth": "^0.9.15"
+  }
+}

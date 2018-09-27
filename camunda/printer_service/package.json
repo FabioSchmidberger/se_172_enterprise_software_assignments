@@ -6,6 +6,10 @@
   "author": "fabio schmidberger",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "camunda-external-task-client-js": "^1.1.0-alpha1"
   }
