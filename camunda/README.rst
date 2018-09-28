@@ -1,7 +1,7 @@
 Camunda Test
 ============
 
-Follow this online guide: https://d ocs.camunda.org/get-started/quick-start
+Follow this online guide: https://docs.camunda.org/get-started/quick-start
 
 - install camunda modeler as desktop application
 
