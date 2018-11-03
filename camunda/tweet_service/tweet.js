@@ -77,13 +77,13 @@ subscribe(
 
 subscribe(
   'favorite-tweet',
-  () => `https://api.twitter.com/1.1/statuses/favorties/create.json`,
+  () => `https://api.twitter.com/1.1/favorties/create.json`,
   ctx => ({id: ctx.get('tweet-Id')})
 );
 
 subscribe(
   'unfavorite-tweet',
-  () => `https://api.twitter.com/1.1/statuses/favorties/destroy.json`,
+  () => `https://api.twitter.com/1.1/favorties/destroy.json`,
   ctx => ({id: ctx.get('tweet-Id')})
 );
 
