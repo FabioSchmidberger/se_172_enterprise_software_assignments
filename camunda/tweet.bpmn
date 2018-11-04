@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1hjcp00" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1hjcp00" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.1">
   <bpmn:process id="post-tweet" name="Post Tweet" isExecutable="true" camunda:versionTag="1">
     <bpmn:serviceTask id="printing-tweet" name="Print Tweet" camunda:type="external" camunda:topic="print-tweet">
       <bpmn:incoming>SequenceFlow_0l6okpf</bpmn:incoming>
@@ -37,18 +37,21 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="SequenceFlow_08hpm29" sourceRef="StartEvent_0mfsyas" targetRef="Task_0n1qwfh" />
     <bpmn:serviceTask id="Task_0vhh9t9" name="Post Tweet" camunda:type="external" camunda:topic="post-tweet">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="tweet-id">HALLO</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0oahuyx</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_06bj1dy</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1s5zhnh</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0oahuyx" sourceRef="printing-tweet" targetRef="Task_0vhh9t9" />
-    <bpmn:sequenceFlow id="SequenceFlow_06bj1dy" sourceRef="Task_0vhh9t9" targetRef="Task_0e5e97h" />
     <bpmn:serviceTask id="Task_0e5e97h" name="Show Tweet" camunda:type="external" camunda:topic="show-tweet">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property />
         </camunda:properties>
       </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_06bj1dy</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0u44b84</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_19eld8q</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1nrfx0w</bpmn:incoming>
@@ -97,6 +100,7 @@
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1aljzmd</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1loqrgn</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0qky4ye</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0qky4ye" sourceRef="Task_04lv61s" targetRef="ExclusiveGateway_157t8u3" />
@@ -136,6 +140,12 @@
     <bpmn:sequenceFlow id="SequenceFlow_08vm2zh" name="Reply" sourceRef="ExclusiveGateway_157t8u3" targetRef="Task_0bnqxus">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${action=="reply"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1s5zhnh" sourceRef="Task_0vhh9t9" targetRef="Task_06k9evj" />
+    <bpmn:serviceTask id="Task_06k9evj" name="Print Idr" camunda:type="external" camunda:topic="print-id">
+      <bpmn:incoming>SequenceFlow_1s5zhnh</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1loqrgn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1loqrgn" sourceRef="Task_06k9evj" targetRef="Task_04lv61s" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="post-tweet">
@@ -187,12 +197,8 @@
         <di:waypoint x="556" y="167" />
         <di:waypoint x="606" y="167" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_06bj1dy_di" bpmnElement="SequenceFlow_06bj1dy">
-        <di:waypoint x="656" y="207" />
-        <di:waypoint x="656" y="281" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_09p6jcd_di" bpmnElement="Task_0e5e97h">
-        <dc:Bounds x="606" y="281" width="100" height="80" />
+        <dc:Bounds x="426" y="281" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_11xfc4g_di" bpmnElement="Task_09st05b">
         <dc:Bounds x="1054" y="281" width="100" height="80" />
@@ -213,7 +219,7 @@
         <dc:Bounds x="756" y="559" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1aljzmd_di" bpmnElement="SequenceFlow_1aljzmd">
-        <di:waypoint x="706" y="321" />
+        <di:waypoint x="526" y="321" />
         <di:waypoint x="756" y="321" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1h8pk9k_di" bpmnElement="SequenceFlow_1h8pk9k">
@@ -234,37 +240,32 @@
       <bpmndi:BPMNEdge id="SequenceFlow_0xbz5h8_di" bpmnElement="SequenceFlow_0xbz5h8">
         <di:waypoint x="656" y="639" />
         <di:waypoint x="656" y="729" />
-        <di:waypoint x="447" y="729" />
-        <di:waypoint x="447" y="321" />
-        <di:waypoint x="606" y="321" />
+        <di:waypoint x="476" y="729" />
+        <di:waypoint x="476" y="361" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0u44b84_di" bpmnElement="SequenceFlow_0u44b84">
         <di:waypoint x="956" y="639" />
         <di:waypoint x="956" y="731" />
-        <di:waypoint x="445" y="731" />
-        <di:waypoint x="445" y="321" />
-        <di:waypoint x="606" y="321" />
+        <di:waypoint x="476" y="731" />
+        <di:waypoint x="476" y="361" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_19eld8q_di" bpmnElement="SequenceFlow_19eld8q">
         <di:waypoint x="1104" y="639" />
         <di:waypoint x="1104" y="736" />
-        <di:waypoint x="444" y="736" />
-        <di:waypoint x="444" y="321" />
-        <di:waypoint x="606" y="321" />
+        <di:waypoint x="476" y="736" />
+        <di:waypoint x="476" y="361" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1nrfx0w_di" bpmnElement="SequenceFlow_1nrfx0w">
         <di:waypoint x="806" y="639" />
         <di:waypoint x="806" y="732" />
-        <di:waypoint x="445" y="732" />
-        <di:waypoint x="445" y="321" />
-        <di:waypoint x="606" y="321" />
+        <di:waypoint x="476" y="732" />
+        <di:waypoint x="476" y="361" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_10x5c9d_di" bpmnElement="SequenceFlow_10x5c9d">
         <di:waypoint x="506" y="639" />
         <di:waypoint x="506" y="734" />
-        <di:waypoint x="443" y="734" />
-        <di:waypoint x="443" y="321" />
-        <di:waypoint x="606" y="321" />
+        <di:waypoint x="476" y="734" />
+        <di:waypoint x="476" y="361" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_07ls78h_di" bpmnElement="SequenceFlow_07ls78h">
         <di:waypoint x="831" y="460" />
@@ -320,6 +321,17 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="512" y="497" width="29" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1s5zhnh_di" bpmnElement="SequenceFlow_1s5zhnh">
+        <di:waypoint x="706" y="167" />
+        <di:waypoint x="756" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1rrnx0l_di" bpmnElement="Task_06k9evj">
+        <dc:Bounds x="756" y="127" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1loqrgn_di" bpmnElement="SequenceFlow_1loqrgn">
+        <di:waypoint x="806" y="207" />
+        <di:waypoint x="806" y="281" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
