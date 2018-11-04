@@ -57,9 +57,9 @@ subscribe(
   'post-tweet',
   () => 'https://api.twitter.com/1.1/statuses/update.json',
   ctx => ({status: ctx.get('text')}),
-  (ctx, data) => { 
+  (ctx, data) => {
     const tweetid = JSON.parse(data).id_str;
-    console.log('post-tweet with ID: ' + tweetid); 
+    console.log('post-tweet with ID: ' + tweetid);
     ctx.setAll({tweetid});
   }
 );
@@ -119,3 +119,5 @@ subscribe(
   undefined,
   true
 );
+
+module.exports  = subscribe
