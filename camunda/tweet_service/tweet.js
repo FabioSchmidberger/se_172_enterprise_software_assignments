@@ -91,19 +91,19 @@ subscribe(
 
 subscribe(
   'unretweet-tweet',
-  ctx => `https://api.twitter.com/1.1/statuses/unretweet/${ctx.get('retweet-Id')}.json`,
+  ctx => `https://api.twitter.com/1.1/statuses/unretweet/${ctx.get('tweetid')}.json`,
   ctx => ({id: ctx.get('tweetid')})
 );
 
 subscribe(
   'favorite-tweet',
-  () => `https://api.twitter.com/1.1/favorties/create.json`,
+  () => `https://api.twitter.com/1.1/favorites/create.json`,
   ctx => ({id: ctx.get('tweetid')})
 );
 
 subscribe(
   'unfavorite-tweet',
-  () => `https://api.twitter.com/1.1/favorties/destroy.json`,
+  () => `https://api.twitter.com/1.1/favorites/destroy.json`,
   ctx => ({id: ctx.get('tweetid')})
 );
 
