@@ -24,7 +24,7 @@ const oauth = new OAuth.OAuth(
   'HMAC-SHA1'
 );
 
-const subscribe = (taskName, urlGetter, paramGetter, onSuccess, onError, isGet) =>
+const subscribe = (taskName, urlGetter, paramGetter, onSuccess, onError) =>
   client.subscribe(taskName, async ({task, taskService}) => {
     const url = urlGetter(task.variables);
     const params = paramGetter(task.variables);
@@ -70,6 +70,51 @@ client.subscribe('print-id', async ({task, taskService}) => {
   await taskService.complete(task);
 });
 
+
+client.subscribe('follow-user', async ({task, taskService}) => {
+
+const tweet_data = {
+  screen_name: 'cyanhot',
+  user_id: '789087378237448192'
+}
+
+ oauth.post('https://api.twitter.com/1.1/friendships/create.json',
+twitter_user_access_token,  // oauth_token (user access token)
+  twitter_user_secret,  // oauth_secret (user secret)
+  tweet_data,  // post body
+  '',  // post content type ?
+function(err, data, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("No Error");
+  }
+});
+
+});
+
+client.subscribe('unfollow-user', async ({task, taskService}) => {
+
+  const tweet_data = {
+    screen_name: 'cyanhot',
+    user_id: '789087378237448192'
+  }
+  
+   oauth.post('https://api.twitter.com/1.1/friendships/destroy.json',
+  twitter_user_access_token,  // oauth_token (user access token)
+    twitter_user_secret,  // oauth_secret (user secret)
+    tweet_data,  // post body
+    '',  // post content type ?
+  function(err, data, res) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("No Error");
+    }
+  });
+  
+  });
+
 subscribe(
   'destroy-tweet',
   ctx => `https://api.twitter.com/1.1/statuses/destroy/${ctx.get('tweetid')}.json`,
@@ -105,17 +150,4 @@ subscribe(
   'unfavorite-tweet',
   () => `https://api.twitter.com/1.1/favorites/destroy.json`,
   ctx => ({id: ctx.get('tweetid')})
-);
-
-subscribe(
-  'show-tweet',
-  () => `https://api.twitter.com/1.1/statuses/show.json`,
-  ctx => ({id: ctx.get('tweetid')}),
-  (ctx, res) => {
-    ctx.set('favorited', res.favorited);
-    ctx.set('retweeted', res.retweeted);
-    ctx.set('in_reply_to_status_id', res.in_reply_to_status_id);
-  },
-  undefined,
-  true
 );

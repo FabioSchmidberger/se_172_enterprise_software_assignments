@@ -58,7 +58,7 @@
       <bpmn:incoming>SequenceFlow_0gbdzze</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1gu9rk2</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="ServiceTask_04j40q9" name="Unretweet Tweet" camunda:type="external" camunda:topic="unretweet-tweet">
+    <bpmn:serviceTask id="ServiceTask_04j40q9" name="Unretweet Tweetet" camunda:type="external" camunda:topic="unretweet-tweet">
       <bpmn:incoming>SequenceFlow_0wxzpqd</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0khyu2m</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -82,6 +82,8 @@
             <camunda:value id="retweet" name="Retweet" />
             <camunda:value id="destroy" name="Destroy" />
             <camunda:value id="exit" name="Exit" />
+            <camunda:value id="follow" name="Follow" />
+            <camunda:value id="unfollow" name="Unfollow" />
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -91,6 +93,8 @@
       <bpmn:incoming>SequenceFlow_0lgmjbo</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0ghihvg</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1gu9rk2</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1cml4qv</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0aaa3pl</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0qky4ye</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0qky4ye" sourceRef="Task_04lv61s" targetRef="ExclusiveGateway_157t8u3" />
@@ -103,6 +107,8 @@
       <bpmn:outgoing>SequenceFlow_0uxwuhu</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0wxzpqd</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_08vm2zh</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1sylqzt</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1yit3bd</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_07ls78h" name="Exit" sourceRef="ExclusiveGateway_157t8u3" targetRef="EndEvent_044171o">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${action=="exit"}</bpmn:conditionExpression>
@@ -131,18 +137,27 @@
       <bpmn:outgoing>SequenceFlow_1loqrgn</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1loqrgn" sourceRef="Task_06k9evj" targetRef="Task_04lv61s" />
-    <bpmn:serviceTask id="ServiceTask_13sqywk" name="Show Tweet" camunda:type="external" camunda:topic="show-tweet">
-      <bpmn:extensionElements>
-        <camunda:properties>
-          <camunda:property />
-        </camunda:properties>
-      </bpmn:extensionElements>
-    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_1nert5i" sourceRef="Task_0bnqxus" targetRef="Task_04lv61s" />
     <bpmn:sequenceFlow id="SequenceFlow_0khyu2m" sourceRef="ServiceTask_04j40q9" targetRef="Task_04lv61s" />
     <bpmn:sequenceFlow id="SequenceFlow_0lgmjbo" sourceRef="ServiceTask_1ivqc8y" targetRef="Task_04lv61s" />
     <bpmn:sequenceFlow id="SequenceFlow_0ghihvg" sourceRef="ServiceTask_0ss954z" targetRef="Task_04lv61s" />
     <bpmn:sequenceFlow id="SequenceFlow_1gu9rk2" sourceRef="Task_1rknlkk" targetRef="Task_04lv61s" />
+    <bpmn:serviceTask id="Task_0djzdmh" name="Follow User" camunda:expression="follow-user">
+      <bpmn:incoming>SequenceFlow_1yit3bd</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0aaa3pl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1sylqzt" name="unfollow" sourceRef="ExclusiveGateway_157t8u3" targetRef="Task_1vha7ct">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${action=="unfollow"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1cml4qv" sourceRef="Task_1vha7ct" targetRef="Task_04lv61s" />
+    <bpmn:serviceTask id="Task_1vha7ct" name="Unfollow User" camunda:type="external" camunda:topic="unfollow-user">
+      <bpmn:incoming>SequenceFlow_1sylqzt</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1cml4qv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0aaa3pl" sourceRef="Task_0djzdmh" targetRef="Task_04lv61s" />
+    <bpmn:sequenceFlow id="SequenceFlow_1yit3bd" name="follow" sourceRef="ExclusiveGateway_157t8u3" targetRef="Task_0djzdmh">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${action=="follow"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="post-tweet">
@@ -236,11 +251,11 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0qxpl2s_di" bpmnElement="SequenceFlow_0qxpl2s">
-        <di:waypoint x="831" y="460" />
-        <di:waypoint x="1208" y="460" />
-        <di:waypoint x="1208" y="361" />
+        <di:waypoint x="828" y="457" />
+        <di:waypoint x="1172" y="406" />
+        <di:waypoint x="1191" y="361" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1210" y="404" width="38" height="14" />
+          <dc:Bounds x="1182" y="385" width="38" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0gbdzze_di" bpmnElement="SequenceFlow_0gbdzze">
@@ -293,9 +308,6 @@
         <di:waypoint x="806" y="207" />
         <di:waypoint x="806" y="281" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_13sqywk_di" bpmnElement="ServiceTask_13sqywk">
-        <dc:Bounds x="126" y="587" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1nert5i_di" bpmnElement="SequenceFlow_1nert5i">
         <di:waypoint x="456" y="599" />
         <di:waypoint x="432" y="599" />
@@ -329,6 +341,43 @@
         <di:waypoint x="432" y="695" />
         <di:waypoint x="432" y="321" />
         <di:waypoint x="756" y="321" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0n6aeg5_di" bpmnElement="Task_0djzdmh">
+        <dc:Bounds x="1248" y="559" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1sylqzt_di" bpmnElement="SequenceFlow_1sylqzt">
+        <di:waypoint x="831" y="460" />
+        <di:waypoint x="1369" y="460" />
+        <di:waypoint x="1458" y="475" />
+        <di:waypoint x="1461" y="559" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1378" y="461" width="42" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1cml4qv_di" bpmnElement="SequenceFlow_1cml4qv">
+        <di:waypoint x="1462" y="639" />
+        <di:waypoint x="1462" y="731" />
+        <di:waypoint x="422" y="731" />
+        <di:waypoint x="422" y="321" />
+        <di:waypoint x="756" y="321" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_042hfvs_di" bpmnElement="Task_1vha7ct">
+        <dc:Bounds x="1412" y="559" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0aaa3pl_di" bpmnElement="SequenceFlow_0aaa3pl">
+        <di:waypoint x="1298" y="639" />
+        <di:waypoint x="1298" y="719" />
+        <di:waypoint x="414" y="719" />
+        <di:waypoint x="414" y="321" />
+        <di:waypoint x="756" y="321" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yit3bd_di" bpmnElement="SequenceFlow_1yit3bd">
+        <di:waypoint x="831" y="460" />
+        <di:waypoint x="1283" y="467" />
+        <di:waypoint x="1293" y="559" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1043" y="446" width="29" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
